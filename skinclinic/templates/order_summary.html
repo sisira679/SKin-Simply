@@ -1,0 +1,235 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Summary</title>
+    <style>
+        /* Style for container */
+        .order-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Style for order ID */
+        .order-id {
+            font-weight: bold;
+            color: blue;
+        }
+
+        /* Style for username */
+        .username {
+            font-weight: bold;
+            color: green;
+        }
+
+        /* Style for total amount */
+        .total-amount {
+            font-weight: bold;
+            color: red;
+        }
+
+        /* Style for payment ID */
+        .payment-id {
+            font-weight: bold;
+            color: orange;
+        }
+
+        /* Style for payment status */
+        .payment-status {
+            font-weight: bold;
+            color: purple;
+        }
+
+        /* Style for created at */
+        .created-at {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Style for horizontal rule */
+        hr {
+            border: 1px solid #ccc;
+            margin: 10px 0;
+        }
+
+        /* Style for product image */
+        .product-image {
+            max-width: 100px; /* Adjust the maximum width of the image */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Ensure proper spacing */
+            margin-bottom: 10px; /* Add some space below the image */
+        }
+    </style>
+</head>
+{% include 'home.html'%}
+<body>
+    <br><br><br>
+    <h1 style="text-align: center; font-weight: bold;">Order Summary</h1>
+    <ul>
+        {% for order in orders %}
+            <div class="order-container">
+                <li>
+                    {% if order.product.image_url %}
+                        <img src="{{ order.product.image_url }}" alt="Product Image" class="product-image">
+                    {% endif %}
+                    <strong class="order-id">Order ID:</strong> {{ order.id }}<br>
+                    <strong class="username">User:</strong> {{ order.user.username }}<br>
+                    <strong class="total-amount">Total Amount:</strong> {{ order.total_amount }}<br>
+                    <strong class="payment-id">Payment ID:</strong> {{ order.payment_id }}<br>
+                    <strong class="payment-status">Payment Status:</strong>  {{ order.payment_status }}</p>
+                    <br>
+                    <strong class="created-at">Created At:</strong> {{ order.created_at }}<br>
+                    <hr>
+                </li>
+            </div>
+        {% empty %}
+            <li>No orders found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html> {% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Summary</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome for icons -->
+    <style>
+        /* Your existing styles */
+        /* Style for container */
+        .order-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Style for order ID */
+        .order-id {
+            font-weight: bold;
+            color: blue;
+        }
+
+        /* Style for username */
+        .username {
+            font-weight: bold;
+            color: green;
+        }
+
+        /* Style for total amount */
+        .total-amount {
+            font-weight: bold;
+            color: red;
+        }
+
+        /* Style for payment ID */
+        .payment-id {
+            font-weight: bold;
+            color: orange;
+        }
+
+        /* Style for payment status */
+        .payment-status {
+            font-weight: bold;
+            color: purple;
+        }
+
+        /* Style for created at */
+        .created-at {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Style for delivery status */
+        .delivery-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .status-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .status-text {
+            font-weight: bold;
+        }
+
+        /* Custom icon colors based on delivery status */
+        .pending .status-icon {
+            color: orange; /* Pending status color */
+        }
+
+        .in-progress .status-icon {
+            color: blue; /* In-progress status color */
+        }
+
+        .completed .status-icon {
+            color: green; /* Completed status color */
+        }
+
+        /* Style for product image */
+        .product-image {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+{% include "home.html" %}
+<body>
+    <br><br><br>
+    <h1 style="text-align: center; font-weight: bold;">Order Summary</h1>
+    <ul>
+        {% for order in orders %}
+            <div class="order-container">
+                <li>
+
+                     
+                    
+                    <strong class="order-id">Order ID:</strong> {{ order.id }}<br>
+                    <strong class="username">User:</strong> {{ order.user.username }}<br>
+                    <strong class="total-amount">Total Amount:</strong> {{ order.total_amount }}<br>
+                    <strong class="payment-id">Payment ID:</strong> {{ order.payment_id }}<br>
+                    <div class="hh-grayBox pt45" data-delivery-status="{{ order.delivery_status }}">
+                        <div class="delivery-status {% if order.delivery_status == 'OUT_FOR_DELIVERY' %}in-progress{% elif order.delivery_status == 'DELIVERED' %}completed{% else %}pending{% endif %}">
+                            <div class="status-icon">
+                                {% if order.delivery_status == 'OUT_FOR_DELIVERY' %}
+                                    <i class="fas fa-truck"></i> <!-- Icon for out for delivery -->
+                                {% elif order.delivery_status == 'DELIVERED' %}
+                                    <i class="fas fa-check-circle"></i> <!-- Icon for delivered -->
+                                {% else %}
+                                    <i class="fas fa-clock"></i> <!-- Icon for pending -->
+                                {% endif %}
+                            </div>
+                            <div class="status-text">{{ order.delivery_status }}</div>
+                        </div>
+
+                    </div>
+                    <br>
+                    <hr>
+               
+                </li>
+            </div>
+        {% empty %}
+            <li>No orders found.</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        // You can keep the JavaScript logic for adding classes as before if needed
+    </script>
+</body>
+</html>

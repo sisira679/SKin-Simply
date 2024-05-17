@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Appointment</title>
+    <style>
+        /* CSS for the select field */
+        .fi {
+            display: inline-block;
+            width: calc(50% - 10px);
+            padding: 8px; /* Adjust padding as needed */
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px; /* Adjust font size as needed */
+            appearance: none; /* Remove default styling */
+            background-color: #fff; /* Set background color */
+            background-image: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%); /* Add gradient for a nicer appearance */
+            background-size: 100% 2px; /* Adjust size to create a line at the bottom */
+            background-position: 0 100%; /* Position the gradient at the bottom */
+            background-repeat: no-repeat; /* Prevent repetition */
+            padding-right: 30px; /* Adjust padding to accommodate the arrow icon */
+        }
+        
+        .fi option {
+            font-size: 14px; /* Adjust font size for options as needed */
+        }
+        
+        /* Adjust the arrow icon color */
+        .fi:hover {
+            border-color: #aaa;
+        }
+        
+        .fi:focus {
+            border-color: #555;
+        }
+        
+        /* CSS for the submit button */
+.submit-button {
+    display: inline-block;
+    width: calc(20% - 10px); /* Adjust width as needed */
+    padding: 8px; /* Adjust padding as needed */
+    margin-left: 10px;
+    background-color: #c55340;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px; /* Adjust font size as needed */
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #45a049;
+}
+/* CSS for the container */
+.io {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px; /* Add padding around the container */
+}
+
+/* CSS for each doctor card */
+.col-m {
+    width: calc(25% - 20px);
+    margin-bottom: 20px;
+}
+
+/* CSS for the card */
+.car {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden; /* Ensure profile picture stays within rounded borders */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+/* CSS for the profile picture */
+.profile-picture {
+    width: 130px;
+    height: 130px;
+    border-radius: 70%; /* Make the picture round */
+    margin: 10px auto; /* Center the picture horizontally */
+}
+
+/* CSS for the card body */
+.card-body {
+    padding: 20px;
+}
+
+/* CSS for the card title */
+.card-title {
+    font-size: 18px; /* Adjust font size as needed */
+    margin-bottom: 10px;
+}
+
+/* CSS for other text elements */
+.card-body p {
+    font-size: 14px; /* Adjust font size as needed */
+    margin-bottom: 5px;
+}
+
+/* CSS for the book appointment link */
+.btn-o {
+    display: inline-block;
+    background-color: #c55340;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px; /* Adjust font size as needed */
+    transition: background-color 0.3s;
+}
+
+.btn-o:hover {
+    background-color: #45a049;
+}
+
+/* CSS for the 'Not Available' message */
+.text-danger {
+    color: red;
+}
+
+        
+    </style>
+</head>
+
+<body>
+    {% include 'home.html'%}
+
+    {% if user.is_authenticated %}
+    <br><br><br><br><br><br>
+    <form method="get" action="{% url 'appointment' %}">
+        <div class="container te">
+            <label for="specializations" class="label"></label>
+            <select name="specializations" class="fi" required>
+                <option value="">Select Specialization</option>
+                <option value="medical_dermatology" {% if selected_specialization == "medical_dermatology" %} selected {% endif %}>Medical Dermatology</option>
+                <option value="cosmetic_dermatology" {% if selected_specialization == "cosmetic_dermatology" %} selected {% endif %}>Cosmetic Dermatology</option>
+                <option value="laser_dermatology" {% if selected_specialization == "laser_dermatology" %} selected {% endif %}>Laser Dermatology</option>
+                <option value="hair_treatment" {% if selected_specialization == "hair_treatment" %} selected {% endif %}>Hair Treatment</option>
+            </select>
+            <button type="submit" class="submit-button" id="book-app">Submit</button>
+        </div>
+    </form>
+    
+    <div id="doctor-cards" class="io">
+        {% for doctor in doctors %}
+        <div class="col-m">
+            <div class="car">
+                <div class="profile-picture rounded-circle mx-auto mt-3">
+                    {% if doctor.doctorprofile.profile_picture %}
+                    <img src="{{ doctor.doctorprofile.profile_picture.url }}" class="card-img" alt="{{ doctor.first_name }} Profile P">
+                    {% else %}
+                    <!-- Display a default profile picture or an empty image -->
+                    <img src="{% static 'path/to/default/profile_picture.png' %}" class="card-img" alt="{{ doctor.first_name }} Profile P">
+                    {% endif %}
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title" style="font-size: 15px; font-weight: bold; color: #333;"> Dr {{ doctor.first_name }} {{ doctor.last_name }}</h5>
+                   
+                    <p><strong>Consultation Fee:</strong> {% if doctor.doctorprofile.consultation_fee %}{{ doctor.doctorprofile.consultation_fee }} RS {% else %}Not specified{% endif %}</p>
+                    <!-- Display the email and phone from DoctorProfile -->
+                    <p><strong>Email:</strong> {{ doctor.email }}</p>
+                    <p><strong>Phone:</strong> {{ doctor.doctorprofile.phonenumber }}</p>
+                    {% if not doctor.on_leave %}
+                    <a href="{% url 'book_appointment' doctor.id %}" class="btn-o" id="book">Book Appointment</a>
+                    {% else %}
+                    <p class="text-danger">Not Available (On Leave)</p>
+                    {% endif %}
+                    <!-- Add more doctor information here -->
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+
+</html>

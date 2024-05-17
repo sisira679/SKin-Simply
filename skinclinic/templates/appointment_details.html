@@ -1,0 +1,100 @@
+<html>
+<head>
+  <style>
+    /* Reset some default styles */
+    body, h3, p {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .page-content {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .appointment-details {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+    }
+
+    .appointment-details p {
+      margin: 10px 0;
+      font-size: 16px;
+      color: #555;
+    }
+
+    .appointment-details strong {
+      color: #333;
+    }
+
+    .button-container {
+      text-align: center;
+    }
+
+    .button-container a {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #c55340;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-right: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .button-container a:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+{% include 'home.html'%}
+<br><br>
+<body>
+  <div class="page-content">
+    <h3>Prescription Details</h3>
+    {% for appointment in user_appointments %}
+      <div class="appointment-details">
+        <p><strong>Date:</strong> {{ appointment.date }}</p>
+        <p><strong>Time Slot:</strong> {{ appointment.time_slot }}</p>
+        <p><strong>Reason:</strong> {{ appointment.reason }}</p>
+        <p><strong>Doctor Name:</strong> {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}</p>
+        <p><strong>Method:</strong> {{ appointment.payment.method }}</p>
+
+        {% if appointment.prescriptions.all %}
+          {% for prescription in appointment.prescriptions.all %}
+            {% comment %} <p><strong>Prescription ID:</strong> {{ prescription.id }}</p>
+            <p><strong>Medicine:</strong> {{ prescription.medicine }}</p>
+            <p><strong>Dosage:</strong> {{ prescription.dosage }}</p>
+            <p><strong>Duration:</strong> {{ prescription.duration }}</p> {% endcomment %}
+          {% endfor %}
+          <div class="button-container">
+            <a href="{% url 'view_prescription' appointment.id %}">View Prescription</a>
+            <a href="{% url 'download_prescription' appointment.id %}">Download Prescription</a>
+          </div>
+        {% else %}
+          <p>No Prescription</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

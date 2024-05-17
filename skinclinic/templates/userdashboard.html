@@ -1,0 +1,199 @@
+{% load static %}
+
+
+  <!-- ======= Hero Section ======= -->
+  {% include 'home.html' %}
+  <html>
+    <head>
+      <style>
+        .container {
+          text-align: left;
+        }
+        
+        .box {
+          background: linear-gradient(to right, #c55340, #40b2c5);
+          color: white;
+          --width: 180px; /* Reduce the width */
+          --height: calc(var(--width) / 3);
+          width: var(--width);
+          height: var(--height);
+          text-align: center;
+          line-height: var(--height);
+          font-size: calc(var(--height) / 4);
+          font-family: sans-serif;
+          letter-spacing: 0.3em;
+          border: 1px solid darkgoldenrod;
+          border-radius: 10px; /* Modify the border radius */
+          transform: perspective(500px) rotateY(-15deg);
+          text-shadow: 3px 2px 2px rgba(0, 0, 0, 0.2); /* Adjust text shadow */
+          box-shadow: 2px 0 0 3px rgba(0, 0, 0, 0.2); /* Adjust box shadow */
+          transition: 0.5s;
+          position: relative;
+          overflow: hidden;
+          display: inline-block;
+          margin-right: 20px;
+        }
+        
+        .box:hover {
+          transform: perspective(500px) rotateY(15deg);
+          text-shadow: -3px 2px 2px rgba(0, 0, 0, 0.2); /* Adjust text shadow */
+          box-shadow: -2px 0 0 3px rgba(0, 0, 0, 0.2); /* Adjust box shadow */
+        }
+        
+        .box::before {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to right, transparent, white, transparent);
+          left: -100%;
+          transition: 0.5s;
+        }
+        
+        .box:hover::before {
+          left: 100%;
+        }
+         #doctors .product-container {
+            display: flex; /* Use flexbox to display containers inline */
+            flex-wrap: wrap; /* Allow containers to wrap to the next line */
+            max-width: calc(70vw - 50px); /* Adjust the maximum width of the container */
+            margin: 0 auto; /* Center the container horizontally */
+            /* Add more styles as needed */
+        }
+        .product {
+            width: calc(33.33% - 20px); /* Set the width of each container to one-third of the available space */
+            margin: 10px; /* Add some margin between containers */
+            background-color: #f0f0f0; /* Background color for the container */
+            padding: 70px; /* Add padding to the container */
+            text-align: center; /* Center align content */
+            box-sizing: border-box; /* Include padding and border in the width */
+            /* Set a fixed height equal to the width to make the container square */
+            height: calc(33.33% - 20px);
+            max-height: 380px; /* Set a maximum height to avoid excessive height */
+            /* Add more styles as needed */
+        }
+        .product img {
+            max-width: 110%; /* Ensure images don't exceed container width */
+            height: auto;
+            /* Add more styles as needed */
+        }
+        /* Add more custom styles as needed */
+        .product h6 {
+          font-size: 12px; /* Adjust the font size */
+          font-weight: bold; /* Apply bold font weight */
+          text-transform: uppercase; /* Convert text to uppercase */
+          letter-spacing: 1px; /* Add spacing between letters */
+          color: #333; /* Set the text color */
+          margin-top: 10px; /* Add top margin for spacing */
+          transition: color 0.3s ease; /* Smooth color transition on hover */
+      }
+      
+      .product h6:hover {
+          color: #f44336; /* Change text color on hover */
+      }
+      
+      /* Add more styles as needed */
+      
+      </style>
+    </head>
+  <section id="hero" class="d-flex flex-column justify-content-center align-items-center" style="background-image: url('static/assets/img/pic.png');">
+    <div class="container text-center text-md-left" style="text-align: left;">
+      <div class="container text-left" style="text-align: left;">
+        <div class="box" id="appointment-button" onclick="location.href='{% url 'appointment' %}'" style="margin-right: 20px;">Appointment</div>
+        <div class="box" id="product-button" onclick="location.href='{% url 'display_product' %}'"style="margin-left:680px;">Products</div>
+        
+      
+    </div>
+    
+    
+   
+  
+    
+    
+</section>
+<section id="doctors" class="container mt-5">
+  <div class="product-container">
+      {% for product in products %}
+      <div class="product">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+          <h6>{{ product.name }}</h6>
+          <!-- Add other details you want to display -->
+         
+          <p>Brand: {{ product.brand }}</p>
+         
+          <!-- Add more fields as needed -->
+      </div>
+      {% endfor %}
+  </div>
+</section>
+
+<!-- ======= Hero Section ======= -->
+<section id="doctors" class="container mt-5">
+  <h2>Registered Doctors</h2>
+  <div class="row">
+      {% for doctor in users %}
+      <div class="col-md-4 mb-4">
+          <div class="card">
+              {% if doctor.doctorprofile.profile_picture %}
+              <img src="{{ doctor.doctorprofile.profile_picture.url }}" class="card-img-top rounded-circle" alt="{{ doctor.first_name }} Profile Picture" style="width: 180px; height: 180px;">
+              {% else %}
+              <!-- Display a default profile picture or an empty image -->
+              <img src="{% static 'path/to/default/profile_picture.png' %}" class="card-img-top rounded-circle" alt="{{ doctor.first_name }} Profile Picture">
+              {% endif %}
+              <div class="card-body">
+                  <h5 class="card-title"> Dr &nbsp;{{ doctor.first_name }}</h5>
+                  <!-- Add more doctor information here -->
+                  <a href="#" class="btn btn-primary">Book Appointment</a>
+              </div>
+
+          </div>
+      </div>
+      {% empty %}
+      <div class="col-md-12">
+          <p>No doctors registered yet.</p>
+      </div>
+      {% endfor %}
+      <div class="text-center mt-3">
+        <a href="{% url 'alldoctorlist'%}" class="btn btn-primary">View All</a>
+    </div>
+  </div>
+</section>
+
+
+
+
+    
+
+  <main id="main">
+<!-- ======= Services Section ======= -->
+
+      <div class="social-links text-center text-md-right pt-3 pt-md-0">
+        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+      </div>
+    </div>
+  </form>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static '/assets/vendor/purecounter/purecounter_vanilla.js'%}"></script>
+  <script src="{% static '/assets/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+  <script src="{% static '/assets/vendor/glightbox/js/glightbox.min.js'%}"></script>
+  <script src="{% static '/assets/vendor/isotope-layout/isotope.pkgd.min.js'%}"></script>
+  <script src="{% static '/assets/vendor/swiper/swiper-bundle.min.js'%}"></script>
+  <script src="{% static '/assets/vendor/waypoints/noframework.waypoints.js'%}"></script>
+  <script src="{% static '/assets/vendor/php-email-form/validate.js'%}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+
+
+</body>
+
+</html>
